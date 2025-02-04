@@ -16,6 +16,36 @@
             <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
 
+        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1">
+            <StackPanel Margin="10" Orientation="Horizontal">
+                <TextBlock Text="Введите название для поиска " TextAlignment="Right" Width="300" FontSize="20"></TextBlock>
+                <TextBox Name="TBoxSearch" TextChanged="TBoxSearch_TextChanged"  Width="300" FontSize="15"></TextBox>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <TextBlock Text="Сортировка" TextAlignment="Right" Width="300" FontSize="20"></TextBlock>
+                <ComboBox Name="SortComboBox" SelectionChanged="SortComboBox_SelectionChanged"  FontSize="15" Width="200">
+                    <TextBlock> Сортировка</TextBlock>
+                    <TextBlock> по наименованию (по возврастанию)</TextBlock>
+                    <TextBlock> по наименованию (по убыванию)</TextBlock>
+                    <TextBlock> по стоимости (по возврастанию)</TextBlock>
+                    <TextBlock> по стоимости (по убыванию)</TextBlock>
+                    <TextBlock> по размеру скидки (по возврастанию)</TextBlock>
+                    <TextBlock> по размеру скидки (по убыванию)</TextBlock>
+                    <TextBlock> по количеству товара (по возврастанию)</TextBlock>
+                    <TextBlock> по количеству товара (по убыванию)</TextBlock>
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <TextBlock Text="Фильтрация" TextAlignment="Right" Width="300" FontSize="20"></TextBlock>
+                <ComboBox Name="FiltrComboBox" SelectionChanged="FiltrComboBox_SelectionChanged"  FontSize="15" Width="200">
+                    <TextBlock> Все Диапазоны</TextBlock>
+                    <TextBlock> 0-9,99%</TextBlock>
+                    <TextBlock> 10-14,99%</TextBlock>
+                    <TextBlock> 15% и более</TextBlock>
+                </ComboBox>
+            </StackPanel>
+        </WrapPanel>
         <Image Width="200" Grid.Column="0" Stretch="UniformToFill" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0">
             <Image.Source>
                 <ImageSource>
@@ -26,7 +56,10 @@
         
         <TextBlock Text="ООО 41 размер" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0"></TextBlock>
         <Button Content="Назад" Name="BtnBack" Width="175" Height="30" HorizontalAlignment="Right"  VerticalAlignment="Center" Grid.Row="0" Click="BtnBack_Click"></Button>
-        
+        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal">
+            <TextBlock Text="кол-во записей: " FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Row="0"></TextBlock>
+            <TextBlock Name="TBlockCount" FontSize="30" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="0"></TextBlock>
+        </StackPanel>
         <ListView Name="ProductListView" Grid.Row="2">
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -44,10 +77,10 @@
                         </Grid.RowDefinitions>
                         <Image Width="auto" Grid.Column="0" Grid.RowSpan="4" Stretch="UniformToFill" HorizontalAlignment="Left">
                             <Image.Source>
-                                <Binding Path="ProductPhoto">
+                                <Binding Path="ProductPhotoPath">
                                     <Binding.TargetNullValue>
                                         <ImageSource>
-                                            \Products\picture.png
+                                            Products\picture.png
                                         </ImageSource>
                                     </Binding.TargetNullValue>
                                 </Binding>

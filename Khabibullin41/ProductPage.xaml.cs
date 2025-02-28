@@ -15,20 +15,31 @@ using System.Windows.Shapes;
 
 namespace Khabibullin41
 {
-    /// <summary>
-    /// Логика взаимодействия для ProductPage.xaml
-    /// </summary>
     public partial class ProductPage : Page
     {
-        public ProductPage()
+        public ProductPage(User user)
         {
             InitializeComponent();
-            
+
+            TBUsername.Text = $"{user.UserSurname} {user.UserName} {user.UserPatronymic}";
+
+            switch(user.UserRole)
+            {
+                case 1:
+                    TBRole.Text = "Клиент";
+                    break;
+                case 2:
+                    TBRole.Text = "Менеджер";
+                    break;
+                case 3:
+                    TBRole.Text = "Администратор";
+                    break;
+            }
+
             var currentProducts = Khabibullin41Entities.getInstance().Product.ToList();
 
             ProductListView.ItemsSource = currentProducts;
 
-            SortComboBox.SelectedIndex = 0;
             FiltrComboBox.SelectedIndex = 0;
 
             UpdateProducts();
@@ -42,43 +53,6 @@ namespace Khabibullin41
         {
             var currentAgents = Khabibullin41Entities.getInstance().Product.ToList();
 
-
-            if (SortComboBox.SelectedIndex == 0)
-            {
-                currentAgents = currentAgents.OrderBy(p => p.ProductArticleNumber).ToList();
-            }
-            if (SortComboBox.SelectedIndex == 1)
-            {
-                currentAgents = currentAgents.OrderBy(p => p.ProductName).ToList();
-            }
-            if (SortComboBox.SelectedIndex == 2)
-            {
-                currentAgents = currentAgents.OrderByDescending(p => p.ProductName).ToList();
-            }
-            if (SortComboBox.SelectedIndex == 3)
-            {
-                currentAgents = currentAgents.OrderBy(p => p.ProductCostInt).ToList();
-            }
-            if (SortComboBox.SelectedIndex == 4)
-            {
-                currentAgents = currentAgents.OrderByDescending(p => p.ProductCostInt).ToList();
-            }
-            if (SortComboBox.SelectedIndex == 5)
-            {
-                currentAgents = currentAgents.OrderBy(p => p.ProductDiscountAmount).ToList();
-            }
-            if (SortComboBox.SelectedIndex == 6)
-            {
-                currentAgents = currentAgents.OrderByDescending(p => p.ProductDiscountAmount).ToList();
-            }
-            if (SortComboBox.SelectedIndex == 7)
-            {
-                currentAgents = currentAgents.OrderBy(p => p.ProductQuantityInStock).ToList();
-            }
-            if (SortComboBox.SelectedIndex == 8)
-            {
-                currentAgents = currentAgents.OrderByDescending(p => p.ProductQuantityInStock).ToList();
-            }
             if (FiltrComboBox.SelectedIndex == 0)
             {
                 currentAgents = currentAgents.Where(p => Convert.ToInt32(p.ProductDiscountAmount) <= 100).ToList();
@@ -94,6 +68,15 @@ namespace Khabibullin41
             if (FiltrComboBox.SelectedIndex == 3)
             {
                 currentAgents = currentAgents.Where(p => Convert.ToInt32(p.ProductDiscountAmount) >= 15 && Convert.ToInt32(p.ProductDiscountAmount) <= 100).ToList();
+            }
+
+            if (SortComboBox.IsChecked == true)
+            {
+                currentAgents = currentAgents.OrderByDescending(p => p.ProductCostInt).ToList();
+            }
+            if (SortComboBox1.IsChecked == true)
+            {
+                currentAgents = currentAgents.OrderBy(p => p.ProductCostInt).ToList();
             }
 
             currentAgents = currentAgents.Where(p => p.ProductName.ToLower().Contains(TBoxSearch.Text.ToLower())).ToList();
@@ -113,6 +96,15 @@ namespace Khabibullin41
         }
 
         private void FiltrComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateProducts();
+        }
+
+        private void SortComboBox_Checked(object sender, RoutedEventArgs e)
+        {
+            UpdateProducts();
+        }
+        private void SortComboBox1_Checked(object sender, RoutedEventArgs e)
         {
             UpdateProducts();
         }

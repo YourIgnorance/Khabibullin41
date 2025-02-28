@@ -9,6 +9,6 @@
       Title="AddEditPage">
 
     <Grid>
-        
+        <TextBlock Text="Продукты" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
     </Grid>
 </Page>

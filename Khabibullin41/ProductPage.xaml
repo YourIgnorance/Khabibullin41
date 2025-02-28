@@ -10,34 +10,25 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"></RowDefinition>
-            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="250"></RowDefinition>
+            <RowDefinition Height="65"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
 
         <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1">
-            <StackPanel Margin="10" Orientation="Horizontal">
-                <TextBlock Text="Введите название для поиска " TextAlignment="Right" Width="300" FontSize="20"></TextBlock>
-                <TextBox Name="TBoxSearch" TextChanged="TBoxSearch_TextChanged"  Width="300" FontSize="15"></TextBox>
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="поиск по наименованию " TextAlignment="Center" Width="300" FontSize="20"></TextBlock>
+                <TextBox Name="TBoxSearch" TextChanged="TBoxSearch_TextChanged"  Width="300" FontSize="15" Height="30"></TextBox>
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Margin="10">
-                <TextBlock Text="Сортировка" TextAlignment="Right" Width="300" FontSize="20"></TextBlock>
-                <ComboBox Name="SortComboBox" SelectionChanged="SortComboBox_SelectionChanged"  FontSize="15" Width="200">
-                    <TextBlock> Сортировка</TextBlock>
-                    <TextBlock> по наименованию (по возврастанию)</TextBlock>
-                    <TextBlock> по наименованию (по убыванию)</TextBlock>
-                    <TextBlock> по стоимости (по возврастанию)</TextBlock>
-                    <TextBlock> по стоимости (по убыванию)</TextBlock>
-                    <TextBlock> по размеру скидки (по возврастанию)</TextBlock>
-                    <TextBlock> по размеру скидки (по убыванию)</TextBlock>
-                    <TextBlock> по количеству товара (по возврастанию)</TextBlock>
-                    <TextBlock> по количеству товара (по убыванию)</TextBlock>
-                </ComboBox>
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                <TextBlock Text="Сортировка" TextAlignment="Center" Width="300" FontSize="20"></TextBlock>
+                <RadioButton Name="SortComboBox" Content="по возврастанию стоимости"  Checked="SortComboBox_Checked" FontSize="15" Width="250"/>
+                <RadioButton Name="SortComboBox1" Content="по убыванию стоимости" Checked="SortComboBox1_Checked"  FontSize="15" Width="250"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="10">
-                <TextBlock Text="Фильтрация" TextAlignment="Right" Width="300" FontSize="20"></TextBlock>
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                <TextBlock Text="фильтрация по скидке" TextAlignment="Center" Width="300" FontSize="20"></TextBlock>
                 <ComboBox Name="FiltrComboBox" SelectionChanged="FiltrComboBox_SelectionChanged"  FontSize="15" Width="200">
                     <TextBlock> Все Диапазоны</TextBlock>
                     <TextBlock> 0-9,99%</TextBlock>
@@ -46,19 +37,27 @@
                 </ComboBox>
             </StackPanel>
         </WrapPanel>
-        <Image Width="200" Grid.Column="0" Stretch="UniformToFill" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0">
+        <Image Width="200" Height="200" Grid.Column="0" Stretch="UniformToFill" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0">
             <Image.Source>
                 <ImageSource>
                     \Res\logo.png
                 </ImageSource>
             </Image.Source>
         </Image>
-        
+
+        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom" Orientation="Horizontal" Grid.Row="0">
+            <TextBlock Text="Вы авторизованы как " FontSize="20"></TextBlock>
+            <TextBlock Name="TBUsername" FontSize="20"></TextBlock>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Horizontal" Grid.Row="1">
+            <TextBlock Text="Роль: " FontSize="20"></TextBlock>
+            <TextBlock Name="TBRole" FontSize="20"></TextBlock>
+        </StackPanel>
         <TextBlock Text="ООО 41 размер" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0"></TextBlock>
         <Button Content="Назад" Name="BtnBack" Width="175" Height="30" HorizontalAlignment="Right"  VerticalAlignment="Center" Grid.Row="0" Click="BtnBack_Click"></Button>
-        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal">
-            <TextBlock Text="кол-во записей: " FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Row="0"></TextBlock>
-            <TextBlock Name="TBlockCount" FontSize="30" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="0"></TextBlock>
+        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom" Orientation="Horizontal" Grid.Row="1">
+            <TextBlock Text="кол-во записей: " FontSize="30"></TextBlock>
+            <TextBlock Name="TBlockCount" FontSize="30" HorizontalAlignment="Right"></TextBlock>
         </StackPanel>
         <ListView Name="ProductListView" Grid.Row="2">
             <ListView.ItemTemplate>

@@ -35,12 +35,13 @@ namespace Khabibullin41
 
         }
 
-        private async void LoginButton_Click(object sender, RoutedEventArgs e)
+        private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             string login = TBoxLogin.Text;
             string password = TBoxPassword.Text;
             if(TBCaptcha.Text == _captcha)
                 _isCaptched = true;
+
 
             if (!_isCaptched)
             {
@@ -66,14 +67,10 @@ namespace Khabibullin41
             else
             {
                 MessageBox.Show("Введены неверные данные");
-
-                LoginButton.IsEnabled = false;
                 CaptchaEnable();
-                await Task.Delay(10000);
-                LoginButton.IsEnabled = true;
             }
         }
-        private void CaptchaEnable()
+        private async void CaptchaEnable()
         {
             _isCaptched = false;
             TBCaptcha.Visibility = Visibility.Visible;
@@ -88,6 +85,9 @@ namespace Khabibullin41
             capthaFourWord.Text = Convert.ToString(_ValidLitters[random.Next(_ValidLitters.Length)]);
 
             _captcha = capthaOneWord.Text + capthaTwoWord.Text + capthaThreeWord.Text + capthaFourWord.Text;
+            LoginButton.IsEnabled = false;
+            await Task.Delay(10000);
+            LoginButton.IsEnabled = true;
         }
     }
 }

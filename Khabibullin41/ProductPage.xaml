@@ -45,6 +45,7 @@
             </Image.Source>
         </Image>
 
+            <Button Name="BtnOrder"  Content="просмотр заказа" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="BtnOrder_Click"></Button>
         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom" Orientation="Horizontal" Grid.Row="0">
             <TextBlock Text="Вы авторизованы как " FontSize="20"></TextBlock>
             <TextBlock Name="TBUsername" FontSize="20"></TextBlock>
@@ -54,12 +55,16 @@
             <TextBlock Name="TBRole" FontSize="20"></TextBlock>
         </StackPanel>
         <TextBlock Text="ООО 41 размер" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0"></TextBlock>
-        <Button Content="Назад" Name="BtnBack" Width="175" Height="30" HorizontalAlignment="Right"  VerticalAlignment="Center" Grid.Row="0" Click="BtnBack_Click"></Button>
         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom" Orientation="Horizontal" Grid.Row="1">
             <TextBlock Text="кол-во записей: " FontSize="30"></TextBlock>
             <TextBlock Name="TBlockCount" FontSize="30" HorizontalAlignment="Right"></TextBlock>
         </StackPanel>
-        <ListView Name="ProductListView" Grid.Row="2">
+        <ListView Name="ProductListView" Grid.Row="2" MouseRightButtonUp="ProductListView_MouseRightButtonUp">
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Добавить к заказу" Click="MenuItem_Click"/>
+                </ContextMenu>
+            </ListView.ContextMenu>
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>

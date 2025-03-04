@@ -17,6 +17,8 @@ namespace Khabibullin41
 {
     public partial class ProductPage : Page
     {
+        List<Product> selectedProdList = new List<Product>();
+        List<OrderProduct> selectedOrderProducts = new List<OrderProduct>();
         public ProductPage(User user)
         {
             InitializeComponent();
@@ -44,10 +46,21 @@ namespace Khabibullin41
 
             UpdateProducts();
         }
-
-        private void BtnBack_Click(object sender, RoutedEventArgs e)
+        public ProductPage(string userName, string userRole)
         {
-            Manager.MainFrame.Navigate(new AddEditPage());
+            InitializeComponent();
+
+            TBUsername.Text = $"{userName}";
+
+            var currentProducts = Khabibullin41Entities.getInstance().Product.ToList();
+
+            TBRole.Text = $"{userRole}";
+
+            ProductListView.ItemsSource = currentProducts;
+
+            FiltrComboBox.SelectedIndex = 0;
+
+            UpdateProducts();
         }
         public void UpdateProducts()
         {
@@ -72,11 +85,11 @@ namespace Khabibullin41
 
             if (SortComboBox.IsChecked == true)
             {
-                currentAgents = currentAgents.OrderByDescending(p => p.ProductCostInt).ToList();
+                currentAgents = currentAgents.OrderBy(p => p.ProductCostInt).ToList();
             }
             if (SortComboBox1.IsChecked == true)
             {
-                currentAgents = currentAgents.OrderBy(p => p.ProductCostInt).ToList();
+                currentAgents = currentAgents.OrderByDescending(p => p.ProductCostInt).ToList();
             }
 
             currentAgents = currentAgents.Where(p => p.ProductName.ToLower().Contains(TBoxSearch.Text.ToLower())).ToList();
@@ -107,6 +120,43 @@ namespace Khabibullin41
         private void SortComboBox1_Checked(object sender, RoutedEventArgs e)
         {
             UpdateProducts();
+        }
+
+        private void ProductListView_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            var item = (sender as ListView).SelectedItem;
+            
+            if (item != null)
+            {
+                (sender as ListView).ContextMenu.IsOpen = true;
+            }
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedProduct = ProductListView.SelectedItem as Product;
+            if (selectedProduct != null && selectedProduct.ProductQuantityInStock <= 1)
+            {
+                selectedProdList.Add(selectedProduct);
+            }
+            else
+            {
+                //selectedProdList
+            }
+        }
+
+        private void BtnOrder_Click(object sender, RoutedEventArgs e)
+        {
+            //OrderWindow window = new OrderWindow(selectedProdList, selectedOrderList,user);
+            //bool? result = window.ShowDialog();
+            //if (result == true)
+            //{
+            //    UpdateProducts();
+            //}
+            //else
+            //{
+            //    UpdateProducts();
+            //}
         }
     }
 }

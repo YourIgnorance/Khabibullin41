@@ -9,6 +9,6 @@
     <Grid>
         <Image Source="Product/logo.png" HorizontalAlignment="Left"></Image>
         <Frame Grid.Row="1" Name="MainFrame" ContentRendered="MainFrame_ContentRendered" NavigationUIVisibility="Hidden"></Frame>
-        <Button Content="Назад" Name="BtnBack" Width="175" Height="30" HorizontalAlignment="Right"  Click="BtnBack_Click"></Button>
+        <Button Content="Назад" Name="BtnBack" Width="175" Height="30" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="1" Click="BtnBack_Click" ></Button>
     </Grid>
 </Window>

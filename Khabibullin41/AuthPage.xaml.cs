@@ -30,9 +30,15 @@ namespace Khabibullin41
             TBlockCaptcha.Visibility = Visibility.Hidden;
         }
 
-        private void GuestButton_Click(object sender, RoutedEventArgs e)
+        private async void GuestButton_Click(object sender, RoutedEventArgs e)
         {
+            string guest = "Гость";
+            Manager.MainFrame.Navigate(new ProductPage(guest, guest));
 
+            TBoxLogin.Text = "";
+            TBoxPassword.Text = "";
+            _isCaptched = true;
+            TBCaptcha.Text = "";
         }
 
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
@@ -65,6 +71,7 @@ namespace Khabibullin41
                 Manager.MainFrame.Navigate(new ProductPage(user));
                 TBoxLogin.Text = "";
                 TBoxPassword.Text = "";
+                CaptchaDisable();
             }
             else
             {
@@ -92,7 +99,20 @@ namespace Khabibullin41
             capthaThreeWord.Text = Convert.ToString(_ValidLitters[random.Next(_ValidLitters.Length)]);
             capthaFourWord.Text = Convert.ToString(_ValidLitters[random.Next(_ValidLitters.Length)]);
 
+
+
             _captcha = capthaOneWord.Text + capthaTwoWord.Text + capthaThreeWord.Text + capthaFourWord.Text;
+        }
+        private void CaptchaDisable()
+        {
+            _isCaptched = true;
+            TBCaptcha.Visibility = Visibility.Hidden;
+            TBlockCaptcha.Visibility = Visibility.Hidden;
+            capthaOneWord.Text = "";
+            capthaTwoWord.Text = "";
+            capthaThreeWord.Text = "";
+            capthaFourWord.Text = "";
+            TBCaptcha.Text = "";
         }
     }
 }

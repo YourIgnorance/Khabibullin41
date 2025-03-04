@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:Khabibullin41"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="AuthPage">
+      Title="AuthPage" FontFamily="Comic Sans MS">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -25,12 +25,12 @@
         <TextBox Name="TBoxPassword" HorizontalAlignment="Center" Grid.Column="1" Height="40" Width="250" FontSize="15" VerticalAlignment="Top" Grid.Row="1"></TextBox>
         <TextBlock Name="TBlockCaptcha" Text="Введите каптчу" Grid.Row="1" Grid.Column="1" FontSize="22" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5"></TextBlock>
         <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1">
-            <TextBlock Name="capthaOneWord" FontSize="22"></TextBlock>
-            <TextBlock Name="capthaTwoWord" FontSize="22" TextDecorations="Strikethrough"></TextBlock>
+            <TextBlock Name="capthaOneWord" FontSize="22" Margin="30,0,0,0"></TextBlock>
+            <TextBlock Name="capthaTwoWord" FontSize="22" TextDecorations="Strikethrough" Margin="0,5,0,0"></TextBlock>
             <TextBlock Name="capthaThreeWord" FontSize="22" TextDecorations="Strikethrough"></TextBlock>
-            <TextBlock Name="capthaFourWord" FontSize="22" TextDecorations="Strikethrough"></TextBlock>
+            <TextBlock Name="capthaFourWord" FontSize="22" TextDecorations="Strikethrough" Margin="0,10,0,0"></TextBlock>
         </StackPanel>
-        <TextBox Name="TBCaptcha" TextAlignment="Right" Width="200" Height="30" VerticalAlignment="Top" Grid.Row="2" Grid.Column="1" ></TextBox>
+        <TextBox Name="TBCaptcha" Width="200" Height="30" VerticalAlignment="Top" Grid.Row="2" Grid.Column="1" ></TextBox>
         
         <Button Name="GuestButton" Click="GuestButton_Click" Content="Войти как гость" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" Width="240" Height="45" FontSize="30"></Button>
         <Button Name="LoginButton" Click="LoginButton_Click" Content="Войти" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" Width="240" Height="45" FontSize="30"></Button>

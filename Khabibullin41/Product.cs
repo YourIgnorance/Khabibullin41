@@ -11,11 +11,7 @@ namespace Khabibullin41
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Windows.Controls;
-    using System.Windows.Media.Imaging;
-
+    
     public partial class Product
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -40,7 +36,15 @@ namespace Khabibullin41
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderProduct> OrderProduct { get; set; }
-
+        public int OrderProductCount
+        {
+            get
+            {
+                foreach(var item in OrderProduct)
+                    return item.ProductCount;
+                return 1;
+            }
+        }
         public int ProductCostInt
         {
             get

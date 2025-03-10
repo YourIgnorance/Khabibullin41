@@ -20,5 +20,12 @@ namespace Khabibullin41
     
         public virtual Order Order { get; set; }
         public virtual Product Product { get; set; }
+        public int getProductCount
+        {
+            get
+            {
+                return ProductCount;
+            }
+        }
     }
 }

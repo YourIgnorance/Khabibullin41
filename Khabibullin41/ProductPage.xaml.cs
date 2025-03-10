@@ -19,9 +19,16 @@ namespace Khabibullin41
     {
         List<Product> selectedProdList = new List<Product>();
         List<OrderProduct> selectedOrderProducts = new List<OrderProduct>();
+        private bool _guestMode = false;
+        private int _newOrderID = Khabibullin41Entities.getInstance().OrderProduct.Count() + 1;
+        private int _clientID;
         public ProductPage(User user)
         {
             InitializeComponent();
+
+            BtnOrder.Visibility = Visibility.Hidden;
+
+            selectedOrderProducts = Khabibullin41Entities.getInstance().OrderProduct.ToList();
 
             TBUsername.Text = $"{user.UserSurname} {user.UserName} {user.UserPatronymic}";
 
@@ -44,17 +51,23 @@ namespace Khabibullin41
 
             FiltrComboBox.SelectedIndex = 0;
 
+            _clientID = user.UserID;
+
             UpdateProducts();
         }
-        public ProductPage(string userName, string userRole)
+        public ProductPage()
         {
             InitializeComponent();
 
-            TBUsername.Text = $"{userName}";
+            _guestMode = true;
+
+            BtnOrder.Visibility = Visibility.Hidden;
+
+            TBUsername.Text = $"Гость";
 
             var currentProducts = Khabibullin41Entities.getInstance().Product.ToList();
 
-            TBRole.Text = $"{userRole}";
+            TBRole.Text = $"Гость";
 
             ProductListView.ItemsSource = currentProducts;
 
@@ -95,6 +108,7 @@ namespace Khabibullin41
             currentAgents = currentAgents.Where(p => p.ProductName.ToLower().Contains(TBoxSearch.Text.ToLower())).ToList();
 
             ProductListView.ItemsSource = currentAgents;
+            TBlockAllCount.Text = Convert.ToString(Khabibullin41Entities.getInstance().Product.ToList().Count());
             TBlockCount.Text = Convert.ToString(currentAgents.Count());
         }
 
@@ -134,29 +148,51 @@ namespace Khabibullin41
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var selectedProduct = ProductListView.SelectedItem as Product;
-            if (selectedProduct != null && selectedProduct.ProductQuantityInStock <= 1)
+            if (_guestMode)
             {
-                selectedProdList.Add(selectedProduct);
+                MessageBox.Show("Это функция доступна только авторизированным пользователям!");
+                return;
             }
-            else
+            if (ProductListView.SelectedIndex >= 0)
             {
-                //selectedProdList
+                var selectedProduct = ProductListView.SelectedItem as Product;
+                selectedProdList.Add(selectedProduct);
+
+                var newOrderProd = new OrderProduct();
+                newOrderProd.OrderID = _newOrderID;
+
+                newOrderProd.ProductArticleNumber = selectedProduct.ProductArticleNumber;
+                newOrderProd.ProductCount = 1; //кол-во orderproduct
+
+
+                var selOP = selectedOrderProducts.Where(p => Equals(p.ProductArticleNumber, selectedProduct.ProductArticleNumber));
+
+                if (selOP.Count() == 0)
+                {
+                    //MessageBox.Show($"{_newOrderID}");
+                    //_newOrderID+=1;
+                    selectedOrderProducts.Add(newOrderProd);
+                }
+                else
+                {
+                    foreach (OrderProduct p in selectedOrderProducts)
+                    {
+                        if (p.ProductArticleNumber == selectedProduct.ProductArticleNumber)
+                            p.ProductCount++;
+                    }
+                }
+                BtnOrder.Visibility = Visibility.Visible;
+                ProductListView.SelectedIndex = -1;
             }
         }
 
         private void BtnOrder_Click(object sender, RoutedEventArgs e)
         {
-            //OrderWindow window = new OrderWindow(selectedProdList, selectedOrderList,user);
-            //bool? result = window.ShowDialog();
-            //if (result == true)
-            //{
-            //    UpdateProducts();
-            //}
-            //else
-            //{
-            //    UpdateProducts();
-            //}
+            selectedProdList = selectedProdList.Distinct().ToList();
+
+            OrderWindow orderWindow = new OrderWindow(selectedOrderProducts, selectedProdList, TBUsername.Text, _clientID);
+            orderWindow.ShowDialog();
+
         }
     }
 }

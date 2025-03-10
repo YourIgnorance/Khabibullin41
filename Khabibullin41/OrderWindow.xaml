@@ -5,39 +5,55 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Khabibullin41"
         mc:Ignorable="d"
-        Title="OrderWindow" Height="550" Width="800">
+        Title="OrderWindow" Height="820" Width="1250" FontFamily="Comic Sans MS">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"></ColumnDefinition>
-            <ColumnDefinition Width="700"></ColumnDefinition>
+            <ColumnDefinition Width="1000"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="45"/>
             <RowDefinition Height="45"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="300"/>
+            <RowDefinition Height="550"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        
+            
         <TextBlock Text="Дата формирования заказа" FontSize="15" Grid.Row="0"></TextBlock>
         <TextBlock Text="Дата доставки заказа" FontSize="16" Grid.Row="1"></TextBlock>
         <TextBlock Text="ФИО клиента" FontSize="16" Grid.Row="2"></TextBlock>
         <TextBlock Text="Номер заказа" FontSize="16" Grid.Row="3"></TextBlock>
 
-        <DatePicker Grid.Row="0" Grid.Column="1" Width="600" HorizontalAlignment="Left"></DatePicker>
-        <DatePicker Name="OrderDP" Grid.Row="1" Grid.Column="1" Width="600" HorizontalAlignment="Left"></DatePicker>
+        <DatePicker Name="OrderDP" Grid.Row="0" Grid.Column="1" Width="600" HorizontalAlignment="Left"></DatePicker>
+        <DatePicker Name="OrderDeliveryDP" Grid.Row="1" Grid.Column="1" Width="600" HorizontalAlignment="Left"></DatePicker>
         <TextBlock Name="ClientTB" Grid.Row="2" Grid.Column="1" Width="600" HorizontalAlignment="Left"></TextBlock>
         <TextBlock Name="TBOrderID" Grid.Row="3" Grid.Column="1" Width="600" HorizontalAlignment="Left"></TextBlock>
-        
+
+
         <TextBlock Text="Пункт выдачи" FontSize="16" Grid.Row="5"></TextBlock>
         <ComboBox Name="PickupCombo" Grid.Column="1" Grid.Row="5" Width="600" HorizontalAlignment="Left"></ComboBox>
         <Button Name="SaveBtn" Click="SaveBtn_Click" Content="Сохранить" FontSize="26" Grid.Row="6" Grid.Column="2" Width="200" Height="40"></Button>
-        <ListView Name="ShoeListView" Grid.Row="2">
+
+        <ListView Name="ShoeListView" Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="1300">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
-                        <Image Width="auto" Grid.Column="0" Grid.RowSpan="4" Stretch="UniformToFill" HorizontalAlignment="Left">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="300"></ColumnDefinition>
+                            <ColumnDefinition Width="800"></ColumnDefinition>
+                            <ColumnDefinition Width="170"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Image Grid.Column="0" Grid.RowSpan="5" Width="300"  Stretch="UniformToFill" HorizontalAlignment="Left">
                             <Image.Source>
                                 <Binding Path="ProductPhotoPath">
                                     <Binding.TargetNullValue>
@@ -59,6 +75,11 @@
                         <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="2">
                             <TextBlock Text="{Binding ProductDiscountAmount}" FontSize="48"></TextBlock>
                             <TextBlock Text=" %" FontSize="48"></TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="4">
+                            <Button Name="minusBt" Click="minusBt_Click"  Content="-" FontSize="28" Width="50" Height="40"></Button>
+                            <TextBlock Text="{Binding OrderProductCount}" FontSize="48"></TextBlock>
+                            <Button Name="plusBt"   Click="plusBt_Click" Content="+" FontSize="28" Width="50" Height="40"></Button>
                         </StackPanel>
                     </Grid>
                 </DataTemplate>

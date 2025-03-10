@@ -15,6 +15,7 @@
         <AssociationConnector Association="Khabibullin41Model.FK_Order_PickupPoint" ManuallyRouted="false" />
         <AssociationConnector Association="Khabibullin41Model.FK__OrderProd__Produ__2E1BDC42" ManuallyRouted="false" />
         <AssociationConnector Association="Khabibullin41Model.FK_User_Role" ManuallyRouted="false" />
+        <AssociationConnector Association="Khabibullin41Model.FK_Order_User1" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

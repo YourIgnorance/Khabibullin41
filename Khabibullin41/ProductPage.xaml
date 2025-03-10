@@ -45,7 +45,7 @@
             </Image.Source>
         </Image>
 
-            <Button Name="BtnOrder"  Content="просмотр заказа" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="BtnOrder_Click"></Button>
+            <Button Name="BtnOrder" Content="просмотр заказа" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="BtnOrder_Click"></Button>
         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom" Orientation="Horizontal" Grid.Row="0">
             <TextBlock Text="Вы авторизованы как " FontSize="20"></TextBlock>
             <TextBlock Name="TBUsername" FontSize="20"></TextBlock>
@@ -58,6 +58,8 @@
         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom" Orientation="Horizontal" Grid.Row="1">
             <TextBlock Text="кол-во записей: " FontSize="30"></TextBlock>
             <TextBlock Name="TBlockCount" FontSize="30" HorizontalAlignment="Right"></TextBlock>
+            <TextBlock Text="/" FontSize="30"></TextBlock>
+            <TextBlock Name="TBlockAllCount" FontSize="30" HorizontalAlignment="Right"></TextBlock>
         </StackPanel>
         <ListView Name="ProductListView" Grid.Row="2" MouseRightButtonUp="ProductListView_MouseRightButtonUp">
             <ListView.ContextMenu>

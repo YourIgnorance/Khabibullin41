@@ -26,14 +26,17 @@ namespace Khabibullin41
         public AuthPage()
         {
             InitializeComponent();
+
+            TBoxLogin.Text = "DEftn2018";
+            TBoxPassword.Text = "gPq+a}";
+
             TBCaptcha.Visibility = Visibility.Hidden;
             TBlockCaptcha.Visibility = Visibility.Hidden;
         }
 
-        private async void GuestButton_Click(object sender, RoutedEventArgs e)
+        private void GuestButton_Click(object sender, RoutedEventArgs e)
         {
-            string guest = "Гость";
-            Manager.MainFrame.Navigate(new ProductPage(guest, guest));
+            Manager.MainFrame.Navigate(new ProductPage());
 
             TBoxLogin.Text = "";
             TBoxPassword.Text = "";
@@ -100,8 +103,11 @@ namespace Khabibullin41
             capthaFourWord.Text = Convert.ToString(_ValidLitters[random.Next(_ValidLitters.Length)]);
 
 
+            capthaOneWord.TextDecorations = TextDecorations.Strikethrough;
+
 
             _captcha = capthaOneWord.Text + capthaTwoWord.Text + capthaThreeWord.Text + capthaFourWord.Text;
+
         }
         private void CaptchaDisable()
         {

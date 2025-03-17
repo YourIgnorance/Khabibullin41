@@ -148,11 +148,6 @@ namespace Khabibullin41
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            if (_guestMode)
-            {
-                MessageBox.Show("Это функция доступна только авторизированным пользователям!");
-                return;
-            }
             if (ProductListView.SelectedIndex >= 0)
             {
                 var selectedProduct = ProductListView.SelectedItem as Product;
@@ -190,7 +185,7 @@ namespace Khabibullin41
         {
             selectedProdList = selectedProdList.Distinct().ToList();
 
-            OrderWindow orderWindow = new OrderWindow(selectedOrderProducts, selectedProdList, TBUsername.Text, _clientID);
+            OrderWindow orderWindow = new OrderWindow(selectedOrderProducts, selectedProdList, TBUsername.Text, _clientID, _guestMode);
             orderWindow.ShowDialog();
 
         }

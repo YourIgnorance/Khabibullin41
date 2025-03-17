@@ -23,9 +23,10 @@ namespace Khabibullin41
         List<Product> selectedProducts = new List<Product>();
         //private Order _currentOrder = new Order();
         //private OrderProduct _currentOrderProduct = new OrderProduct();
-        private int _clientID, _orderCode, _orderID, _orderPickupPoint;
+        private bool _guestMode;
+        private int _clientID, _orderCode, _orderID, _orderPickupPoint, SumProduct = 0, SumProductWithDiscount = 0;
         private DateTime _orderDate = DateTime.Now, _orderDeliveryDate;
-        public OrderWindow(List<OrderProduct> selectedOrderProducts, List<Product> selectedProducts, string FIO, int clientId)
+        public OrderWindow(List<OrderProduct> selectedOrderProducts, List<Product> selectedProducts, string FIO, int clientId, bool guestMode)
         {
             InitializeComponent();
 
@@ -37,26 +38,22 @@ namespace Khabibullin41
             _orderID = selectedOrderProducts.Last().OrderID + 1;
             ClientTB.Text = FIO;
             TBOrderID.Text = _orderID.ToString();
+            _guestMode = guestMode;
             
-            
-
-            //foreach (Product p in selectedProducts)
-            //{
-            //    p.ProductQuantityInStock = 1;
-            //    foreach (OrderProduct q in selectedOrderProducts)
-            //    {
-            //        if (p.ProductArticleNumber == q.ProductArticleNumber)
-            //            p.ProductQuantityInStock = q.ProductCount;
-            //    } 
-            //}
-            //??????!
             ShoeListView.ItemsSource = selectedProducts;
             this.selectedOrderProducts = selectedOrderProducts;
             this.selectedProducts = selectedProducts;
             Refresh();
             SetDeliveryDate();
+            foreach (Product product in selectedProducts)
+            {
+                SumProduct += product.ProductCostInt;
+                SumProductWithDiscount += product.ProductPriceWithDiscount;
+            }
+            TBSumProduct.Text = SumProduct.ToString();
+            TBSumProductDiscount.Text = SumProductWithDiscount.ToString();
         }
-        public void Refresh()
+        private void Refresh()
         {
             ShoeListView.ItemsSource = selectedProducts;
         }
@@ -85,15 +82,18 @@ namespace Khabibullin41
             newOrder.OrderDate = _orderDate;
             newOrder.OrderDeliveryDate = _orderDeliveryDate;
             newOrder.OrderPickupPoint = _orderPickupPoint;
-            newOrder.OrderClientID = _clientID;
             newOrder.OrderCode = _orderCode;
             newOrder.OrderStatus = "Новый";
+            if(_guestMode)
+                newOrder.OrderClientID = null;
+            else
+                newOrder.OrderClientID = _clientID;
 
-            MessageBox.Show($"id: {_orderID} \norderDate: {_orderDate}\norderDeliveryDate:{_orderDeliveryDate}\norderPickupPoint:{_orderPickupPoint}\norderClientID:{_clientID}\norderCode:{_orderCode}");
+            //MessageBox.Show($"id: {_orderID} \norderDate: {_orderDate}\norderDeliveryDate:{_orderDeliveryDate}\norderPickupPoint:{_orderPickupPoint}\norderClientID:{_clientID}\norderCode:{_orderCode}");
 
             foreach (Product selectprod in selectedProducts)    
             {
-                MessageBox.Show($"OrderPRoduct:\nid: {_orderID}\narcticle:{selectprod.ProductArticleNumber}\nprodcount:{selectprod.OrderProductCount}");
+                //MessageBox.Show($"OrderPRoduct:\nid: {_orderID}\narcticle:{selectprod.ProductArticleNumber}\nprodcount:{selectprod.OrderProductCount}");
                 OrderProduct newOrderProd = new OrderProduct();
                 newOrderProd.OrderID = _orderID;
                 newOrderProd.ProductArticleNumber = selectprod.ProductArticleNumber;
@@ -101,19 +101,17 @@ namespace Khabibullin41
 
                 newOrderProducts.Add(newOrderProd);
             }
-            //foreach (OrderProduct selprod in selectedOrderProducts)
-            //    Khabibullin41Entities.getInstance().OrderProduct.Add(selprod);
-
             
-            Khabibullin41Entities.getInstance().Order.Add(newOrder);
-            foreach (OrderProduct ordprod in newOrderProducts)
-                Khabibullin41Entities.getInstance().OrderProduct.Add(ordprod);
+            //Khabibullin41Entities.getInstance().Order.Add(newOrder);
+            //foreach (OrderProduct ordprod in newOrderProducts)
+            //    Khabibullin41Entities.getInstance().OrderProduct.Add(ordprod);
             try
             {
-                Khabibullin41Entities.getInstance().SaveChanges();
+                //Khabibullin41Entities.getInstance().SaveChanges();
 
+                ShoeListView.ItemsSource = null;
                 MessageBox.Show("Заказ успешно оформлен");
-                Manager.MainFrame.GoBack();
+                this.Close();
             }
             catch (Exception ex)
             {
@@ -132,16 +130,23 @@ namespace Khabibullin41
                 {
                     if (prod.OrderProductCount >= origProd.ProductQuantityInStock)
                     {
-                        MessageBox.Show($"Выбрано максимальное кол-во товаров!\nprod.OrderProductCount: {prod.OrderProductCount}\n origProd.ProductQuantityInStock: {origProd.ProductQuantityInStock}");
+                        MessageBox.Show($"Выбрано максимальное кол-во товаров!");
                         return;
                     }
                 }
             }
+
             prod.OrderProductCount++;
             //prod.ProductQuantityInStock--;
             var selectedOP = selectedOrderProducts.FirstOrDefault(p => p.ProductArticleNumber == prod.ProductArticleNumber);
             int index = selectedOrderProducts.IndexOf(selectedOP);
             selectedOrderProducts[index].ProductCount = prod.OrderProductCount;
+            
+            SumProduct += prod.ProductCostInt;
+            SumProductWithDiscount += prod.ProductPriceWithDiscount;
+            TBSumProduct.Text = SumProduct.ToString();
+            TBSumProductDiscount.Text = SumProductWithDiscount.ToString();
+            
             SetDeliveryDate();
             Refresh();
             ShoeListView.Items.Refresh();
@@ -159,6 +164,11 @@ namespace Khabibullin41
                 selectedProducts.Remove(prod);
             //else
             //    prod.ProductQuantityInStock++; если не удаляем то прибавляем в продукт (возвращаем)
+            SumProduct -= prod.ProductCostInt;
+            SumProductWithDiscount -= prod.ProductPriceWithDiscount;
+            TBSumProduct.Text = SumProduct.ToString();
+            TBSumProductDiscount.Text = SumProductWithDiscount.ToString();
+
             Refresh();
             SetDeliveryDate();
             ShoeListView.Items.Refresh();

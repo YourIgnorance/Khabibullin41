@@ -11,7 +11,7 @@ namespace Khabibullin41
 {
     using System;
     using System.Collections.Generic;
-    
+
     public partial class Product
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -19,7 +19,7 @@ namespace Khabibullin41
         {
             this.OrderProduct = new HashSet<OrderProduct>();
         }
-    
+
         public string ProductArticleNumber { get; set; }
         public string ProductName { get; set; }
         public string ProductUnit { get; set; }
@@ -33,16 +33,20 @@ namespace Khabibullin41
         public string ProductDescription { get; set; }
         public string ProductPhoto { get; set; }
         public string ProductStatus { get; set; }
-    
+        public int OrderProductCount = 1;
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderProduct> OrderProduct { get; set; }
-        public int OrderProductCount
+
+        public int GetOrderProductCount
         {
             get
             {
-                foreach(var item in OrderProduct)
-                    return item.ProductCount;
-                return 1;
+                return OrderProductCount;
+            }
+            set
+            {
+
             }
         }
         public int ProductCostInt

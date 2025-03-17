@@ -78,7 +78,7 @@
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="4">
                             <Button Name="minusBt" Click="minusBt_Click"  Content="-" FontSize="28" Width="50" Height="40"></Button>
-                            <TextBlock Text="{Binding OrderProductCount}" FontSize="48"></TextBlock>
+                            <TextBlock Text="{Binding GetOrderProductCount}" FontSize="48"></TextBlock>
                             <Button Name="plusBt"   Click="plusBt_Click" Content="+" FontSize="28" Width="50" Height="40"></Button>
                         </StackPanel>
                     </Grid>

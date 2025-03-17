@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,8 +21,8 @@ namespace Khabibullin41
     {
         List<OrderProduct> selectedOrderProducts = new List<OrderProduct>(); 
         List<Product> selectedProducts = new List<Product>();
-        private Order currentOrder = new Order();
-        private OrderProduct currentOrderProduct = new OrderProduct();
+        //private Order _currentOrder = new Order();
+        //private OrderProduct _currentOrderProduct = new OrderProduct();
         private int _clientID, _orderCode, _orderID, _orderPickupPoint;
         private DateTime _orderDate = DateTime.Now, _orderDeliveryDate;
         public OrderWindow(List<OrderProduct> selectedOrderProducts, List<Product> selectedProducts, string FIO, int clientId)
@@ -36,20 +37,20 @@ namespace Khabibullin41
             _orderID = selectedOrderProducts.Last().OrderID + 1;
             ClientTB.Text = FIO;
             TBOrderID.Text = _orderID.ToString();
-
+            
             
 
-            foreach (Product p in selectedProducts)
-            {
-                p.ProductQuantityInStock = 1;
-                foreach (OrderProduct q in selectedOrderProducts)
-                {
-                    if (p.ProductArticleNumber == q.ProductArticleNumber)
-                        p.ProductQuantityInStock = q.ProductCount;
-                } 
-            }
+            //foreach (Product p in selectedProducts)
+            //{
+            //    p.ProductQuantityInStock = 1;
+            //    foreach (OrderProduct q in selectedOrderProducts)
+            //    {
+            //        if (p.ProductArticleNumber == q.ProductArticleNumber)
+            //            p.ProductQuantityInStock = q.ProductCount;
+            //    } 
+            //}
             //??????!
-            //ShoeListView.ItemsSource = selectedProducts;
+            ShoeListView.ItemsSource = selectedProducts;
             this.selectedOrderProducts = selectedOrderProducts;
             this.selectedProducts = selectedProducts;
             Refresh();
@@ -88,26 +89,25 @@ namespace Khabibullin41
             newOrder.OrderCode = _orderCode;
             newOrder.OrderStatus = "Новый";
 
-            //MessageBox.Show($"id: {_orderID} \norderDate: {orderDate}\norderDeliveryDate:{orderDeliveryDate}\norderPickupPoint:{_orderPickupPoint}\norderClientID:{_clientID}\norderCode:{_orderCode}");
+            MessageBox.Show($"id: {_orderID} \norderDate: {_orderDate}\norderDeliveryDate:{_orderDeliveryDate}\norderPickupPoint:{_orderPickupPoint}\norderClientID:{_clientID}\norderCode:{_orderCode}");
 
-            foreach (Product selectprod in selectedProducts)
+            foreach (Product selectprod in selectedProducts)    
             {
-            //    MessageBox.Show($"OrderPRoduct:\nid: {_orderID}\narcticle:{selectprod.ProductArticleNumber}\nprodcount:{selectprod.ProductQuantityInStock}");
+                MessageBox.Show($"OrderPRoduct:\nid: {_orderID}\narcticle:{selectprod.ProductArticleNumber}\nprodcount:{selectprod.OrderProductCount}");
                 OrderProduct newOrderProd = new OrderProduct();
                 newOrderProd.OrderID = _orderID;
                 newOrderProd.ProductArticleNumber = selectprod.ProductArticleNumber;
-                newOrderProd.ProductCount = selectprod.ProductQuantityInStock;
+                newOrderProd.ProductCount = selectprod.GetOrderProductCount;
 
                 newOrderProducts.Add(newOrderProd);
             }
             //foreach (OrderProduct selprod in selectedOrderProducts)
             //    Khabibullin41Entities.getInstance().OrderProduct.Add(selprod);
 
-            //Khabibullin41Entities.getInstance().Order.Add()
             
+            Khabibullin41Entities.getInstance().Order.Add(newOrder);
             foreach (OrderProduct ordprod in newOrderProducts)
                 Khabibullin41Entities.getInstance().OrderProduct.Add(ordprod);
-            Khabibullin41Entities.getInstance().Order.Add(newOrder);
             try
             {
                 Khabibullin41Entities.getInstance().SaveChanges();
@@ -130,31 +130,35 @@ namespace Khabibullin41
             {
                 if (prod.ProductArticleNumber == origProd.ProductArticleNumber)
                 {
-                    if (prod.ProductQuantityInStock >= origProd.ProductQuantityInStock)
+                    if (prod.OrderProductCount >= origProd.ProductQuantityInStock)
                     {
-                        MessageBox.Show("Выбрано максимальное кол-во товаров!");
+                        MessageBox.Show($"Выбрано максимальное кол-во товаров!\nprod.OrderProductCount: {prod.OrderProductCount}\n origProd.ProductQuantityInStock: {origProd.ProductQuantityInStock}");
                         return;
                     }
                 }
             }
-            prod.ProductQuantityInStock++;
+            prod.OrderProductCount++;
+            //prod.ProductQuantityInStock--;
             var selectedOP = selectedOrderProducts.FirstOrDefault(p => p.ProductArticleNumber == prod.ProductArticleNumber);
             int index = selectedOrderProducts.IndexOf(selectedOP);
-            selectedOrderProducts[index].ProductCount++;
+            selectedOrderProducts[index].ProductCount = prod.OrderProductCount;
             SetDeliveryDate();
+            Refresh();
             ShoeListView.Items.Refresh();
         }
 
         private void minusBt_Click(object sender, RoutedEventArgs e)
         {
             var prod = (sender as Button).DataContext as Product;
-            prod.ProductQuantityInStock--;
+            prod.OrderProductCount--;
             var selectedOP = selectedOrderProducts.FirstOrDefault(p => p.ProductArticleNumber == prod.ProductArticleNumber);
             int index = selectedOrderProducts.IndexOf(selectedOP);
-            selectedOrderProducts[index].ProductCount--;
-
-            if (prod.ProductQuantityInStock <= 0)
+            selectedOrderProducts[index].ProductCount = prod.OrderProductCount;
+            
+            if (prod.OrderProductCount <= 0)
                 selectedProducts.Remove(prod);
+            //else
+            //    prod.ProductQuantityInStock++; если не удаляем то прибавляем в продукт (возвращаем)
             Refresh();
             SetDeliveryDate();
             ShoeListView.Items.Refresh();

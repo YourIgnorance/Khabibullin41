@@ -23,6 +23,7 @@ namespace Khabibullin41
         List<Product> selectedProducts = new List<Product>();
         //private Order _currentOrder = new Order();
         //private OrderProduct _currentOrderProduct = new OrderProduct();
+        public bool isClosed = false;
         private bool _guestMode;
         private int _clientID, _orderCode, _orderID, _orderPickupPoint, SumProduct = 0, SumProductWithDiscount = 0;
         private DateTime _orderDate = DateTime.Now, _orderDeliveryDate;
@@ -33,6 +34,7 @@ namespace Khabibullin41
             var currentPickups = Khabibullin41Entities.getInstance().PickupPoint.Select(p => p.PickupPointIndex + p.PickupPointCity + p.PickupPointStreet + " " + p.PickupPointHouse).ToList();
             PickupCombo.ItemsSource = currentPickups;
 
+            isClosed = false;
             _clientID = clientId;
             _orderCode = Khabibullin41Entities.getInstance().Order.ToList().Last().OrderCode + 1;
             _orderID = selectedOrderProducts.Last().OrderID + 1;
@@ -101,17 +103,27 @@ namespace Khabibullin41
 
                 newOrderProducts.Add(newOrderProd);
             }
-            
-            //Khabibullin41Entities.getInstance().Order.Add(newOrder);
-            //foreach (OrderProduct ordprod in newOrderProducts)
-            //    Khabibullin41Entities.getInstance().OrderProduct.Add(ordprod);
+
+            Khabibullin41Entities.getInstance().Order.Add(newOrder);
+            foreach (OrderProduct ordprod in newOrderProducts)
+                Khabibullin41Entities.getInstance().OrderProduct.Add(ordprod);
             try
             {
-                //Khabibullin41Entities.getInstance().SaveChanges();
-
-                ShoeListView.ItemsSource = null;
+                Khabibullin41Entities.getInstance().SaveChanges();
+                List<Product> prodList = new List<Product>(); 
                 MessageBox.Show("Заказ успешно оформлен");
-                this.Close();
+                this.Close(); //удаляется только на этой форме в другом классе нет
+                foreach (Product product in selectedProducts)
+                {
+                    prodList.Add(product);
+                }
+                foreach (Product product in prodList)
+                {
+                    selectedProducts.Remove(product);
+                }
+                ProductPage.getInstance().ProductListView.SelectedItems.Clear();
+                ProductPage.getInstance().UpdateVisiabilityOrder();
+                isClosed = true;
             }
             catch (Exception ex)
             {

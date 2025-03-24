@@ -27,8 +27,8 @@ namespace Khabibullin41
         {
             InitializeComponent();
 
-            TBoxLogin.Text = "DEftn2018";
-            TBoxPassword.Text = "gPq+a}";
+            TBoxLogin.Text = "";
+            TBoxPassword.Text = "";
 
             TBCaptcha.Visibility = Visibility.Hidden;
             TBlockCaptcha.Visibility = Visibility.Hidden;

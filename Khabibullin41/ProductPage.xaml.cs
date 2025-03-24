@@ -19,9 +19,19 @@ namespace Khabibullin41
     {
         List<Product> selectedProdList = new List<Product>();
         List<OrderProduct> selectedOrderProducts = new List<OrderProduct>();
+
         private bool _guestMode = false;
         private int _newOrderID = Khabibullin41Entities.getInstance().OrderProduct.Count() + 1;
         private int _clientID;
+        private static ProductPage _instance;
+        public static ProductPage getInstance()
+        {
+            if (_instance == null)
+            {
+                _instance = new ProductPage();
+            }
+            return _instance;
+        }
         public ProductPage(User user)
         {
             InitializeComponent();
@@ -148,7 +158,7 @@ namespace Khabibullin41
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            if (ProductListView.SelectedIndex >= 0)
+            if (ProductListView.SelectedItems.Count > 0)
             {
                 var selectedProduct = ProductListView.SelectedItem as Product;
                 selectedProdList.Add(selectedProduct);
@@ -176,9 +186,19 @@ namespace Khabibullin41
                             p.ProductCount++;
                     }
                 }
-                BtnOrder.Visibility = Visibility.Visible;
+                UpdateVisiabilityOrder();
                 ProductListView.SelectedIndex = -1;
             }
+        }
+        public void UpdateVisiabilityOrder()
+        {
+            if (ProductListView.SelectedItems.Count > 0)
+                BtnOrder.Visibility = Visibility.Visible;
+            else
+            {
+                BtnOrder.Visibility = Visibility.Hidden;
+            }
+
         }
 
         private void BtnOrder_Click(object sender, RoutedEventArgs e)
@@ -187,7 +207,6 @@ namespace Khabibullin41
 
             OrderWindow orderWindow = new OrderWindow(selectedOrderProducts, selectedProdList, TBUsername.Text, _clientID, _guestMode);
             orderWindow.ShowDialog();
-
         }
     }
 }
